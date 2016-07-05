@@ -1,0 +1,159 @@
+<?php
+/*
+Plugin Name: FindUs
+Plugin URI: http://wordpress.org/extend/plugins/findus
+Description: Create contact-maps easily.
+Version: 0.0.1
+Author: Rafael Nowrotek
+Author URI: http://benignware.com
+Author Email: mail@benignware.com
+Text Domain: findus
+Domain Path: /lang/
+Network: false
+License: MIT
+License URI: https://opensource.org/licenses/MIT
+
+Copyright 2016 benignware.com
+*/
+
+require_once "lib/widget.php";
+
+function findus_enqueue_script() {
+  $api_params = array();
+  $api_key = get_option('api_key');
+  if ($api_key) {
+    $api_params['key'] = urlencode($api_key);
+  }
+  $api_url = 'http' . ($_SERVER['HTTPS'] ? 's' : '') . '://maps.googleapis.com/maps/api/js' . (count(array_keys($api_params)) > 0 ? '?' . urldecode(http_build_query($api_params)) : '');
+  wp_enqueue_script('google-maps', $api_url);
+  wp_enqueue_script( 'jquery-findus', plugin_dir_url( __FILE__ ) . 'assets/jquery-findus/jquery.findus.js', array( 'jquery', 'google-maps' ) );
+}
+
+add_action( 'wp_enqueue_scripts', 'findus_enqueue_script' );
+
+
+function findus_shortcode($atts = array(), $content = "") {
+  
+  $findus_options = array('content', 'address', 'longitude', 'latitude', 'map', 'marker', 'info');
+  $atts = shortcode_atts(array(
+    'id' => uniqid(),
+    'class' => 'findus',
+    'address' => '',
+    'content' => '',
+    'latitude' => '',
+    'longitude' => '',
+    'info' => ''
+  ), $atts, 'findus');
+  
+  $options = array();
+  foreach ($atts as $name => $value) {
+    if (in_array($name, $findus_options) === true) {
+      unset($atts[$name]);
+      $options[$name] = $value;
+    } 
+  }
+  $json = json_encode($options, JSON_UNESCAPED_SLASHES);
+  
+  // Create output
+  $output = "<div";
+  foreach ($atts as $name => $value) {
+    $output.= ' ' . $name . '="' . $value . '"';
+  }
+  $output.= ">";
+  $output.= $content;
+  $output.= "</div>";
+  $output.= "<script type=\"text/javascript\">//<![CDATA[\n(function($, window) {\n";
+  $output.= "\t$('#{$atts['id']}').findus(" . $json . ");\n";
+  $output.= "})(jQuery, window)\n//]]></script>\n";
+  return $output;
+}
+ 
+add_shortcode('findus', 'findus_shortcode');
+
+
+
+// TODO: Add formats to tinyMCE
+/*
+// Callback function to insert 'styleselect' into the $buttons array
+function my_mce_buttons_2( $buttons ) {
+  array_unshift( $buttons, 'styleselect' );
+  return $buttons;
+}
+// Register our callback to the appropriate filter
+add_filter( 'mce_buttons_2', 'my_mce_buttons_2' );
+
+
+
+// Callback function to filter the MCE settings
+function my_mce_before_init_insert_formats( $init_array ) {  
+  // Define the style_formats array
+  $style_formats = array(  
+    // Each array child is a format with it's own settings
+    array(  
+      'title' => 'block',  
+      'block' => 'div',  
+      'classes' => 'card card-block',
+      'wrapper' => true,
+      
+    ),  
+    array(  
+      'title' => '⇠.rtl',  
+      'block' => 'blockquote',  
+      'classes' => 'rtl',
+      'wrapper' => true,
+    ),
+    array(  
+      'title' => '.ltr⇢',  
+      'block' => 'blockquote',  
+      'classes' => 'ltr',
+      'wrapper' => true,
+    ),
+  );  
+  // Insert the array, JSON ENCODED, into 'style_formats'
+  $init_array['style_formats'] = json_encode( $style_formats );  
+  
+  return $init_array;  
+  
+} 
+// Attach callback to 'tiny_mce_before_init' 
+add_filter( 'tiny_mce_before_init', 'my_mce_before_init_insert_formats' );  
+*/
+
+
+// create custom plugin settings menu
+add_action('admin_menu', 'findus_create_menu');
+
+function findus_create_menu() {
+
+  //create new top-level menu
+  add_options_page('FindUs', 'Findus', 'administrator', __FILE__, 'findus_settings_page' , plugins_url('/images/icon.png', __FILE__) );
+
+  //call register settings function
+  add_action( 'admin_init', 'register_findus_settings' );
+}
+
+function register_findus_settings() {
+  //register our settings
+  register_setting( 'findus-settings-group', 'api_key' );
+}
+
+function findus_settings_page() {
+?>
+<div class="wrap">
+<h2>FindUs</h2>
+<p>Create contact-maps easily</p>
+<form method="post" action="options.php">
+    <?php settings_fields( 'findus-settings-group' ); ?>
+    <?php do_settings_sections( 'findus-settings-group' ); ?>
+    <table class="form-table">
+        <tr valign="top">
+          <th scope="row">Google Maps API Key</th>
+          <td><input type="text" name="api_key" value="<?php echo esc_attr( get_option('api_key') ); ?>" /></td>
+        </tr>
+    </table>
+    
+    <?php submit_button(); ?>
+
+</form>
+</div>
+<?php } ?>
