@@ -26,7 +26,7 @@ function findus_enqueue_script() {
   }
   $api_url = 'http' . ($_SERVER['HTTPS'] ? 's' : '') . '://maps.googleapis.com/maps/api/js' . (count(array_keys($api_params)) > 0 ? '?' . urldecode(http_build_query($api_params)) : '');
   wp_enqueue_script('google-maps', $api_url);
-  wp_enqueue_script( 'jquery-findus', plugin_dir_url( __FILE__ ) . 'assets/jquery-findus/jquery.findus.js', array( 'jquery', 'google-maps' ) );
+  wp_enqueue_script( 'jquery-findus', plugin_dir_url( __FILE__ ) . 'assets/jquery-findus/dist/jquery.findus.min.js', array( 'jquery', 'google-maps' ) );
 }
 
 add_action( 'wp_enqueue_scripts', 'findus_enqueue_script' );
