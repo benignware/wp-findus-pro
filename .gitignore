@@ -23,5 +23,5 @@ test
 vendor
 
 # Include only jquery-findus from the assets directory
-assets
+assets/*
 !assets/jquery-findus
