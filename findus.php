@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: FindUs
-Plugin URI: http://wordpress.org/extend/plugins/findus
+Plugin URI: https://github.com/benignware-labs/wp-findus
 Description: Create contact-maps easily.
 Version: 0.0.1
 Author: Rafael Nowrotek
