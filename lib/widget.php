@@ -5,7 +5,7 @@ class FindUsWidget extends WP_Widget {
   function __construct() {
     parent::__construct(
     // Base ID of your widget
-    'wp_findus', 
+    'findus', 
     
     // Widget name will appear in UI
     __('Findus Widget', 'findus'), 
