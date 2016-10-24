@@ -1,44 +1,80 @@
-jquery-findus
-=============
+# jquery-findus
 
 > Create contact-maps easily.
 
-This plugin lets you quickly build a customizable map without hassling with google maps api. 
+A jquery-plugin that lets you quickly build a customizable map without hassling with google maps api. 
 
 [Demo](http://benignware.github.io/jquery-findus)
 
-Usage
------
+## Install
 
-Include dependencies
+Include js dependencies
 
 ```html
 <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
 <script src="http://maps.googleapis.com/maps/api/js"></script>
-<script src="jquery.findus.min.js"></script>
+<script src="js/jquery.findus.min.js"></script>
 ```
 
-Provide some content containing a geocodeable address:
+Optionally include css
+
+```html
+<link rel="stylesheet" href="css/jquery.findus.css">
+```
+
+## Usage
+
+Provide geocodeable content
 
 ```html
 <div class="findus">
-  <h5>Find us here</h5>
+  <h4>Find us here</h4>
   <address>
   8411 Market Street<br/>
   San Francisco<br/>
   CA 94103<br/>
+  USA
   </address>
 </div>
 ```
 
-Initialize findus:
+Initialize findus
 
 ```js
-$('.findus').findus();
+$(function() {
+  $('.findus').findus();
+});
+```
+
+### Examples
+
+##### Provide location
+You may also reverse-geocode an address from a location:
+
+```html
+<div class="findus" data-latitude="37.77485730000001" data-longitude="-122.41962339999998"></div>
+```
+
+##### Provide location and content
+To avoid the geocoding service completely, provide both, an location and some content to show up in the map's info-window.
+
+```html
+<div class="findus" data-latitude="37.77485730000001" data-longitude="-122.41962339999998">
+  <h4>Find us here</h4>
+  <address>
+  8411 Market Street<br/>
+  San Francisco<br/>
+  CA 94103<br/>
+  USA
+  </address>
+</div>
 ```
 
 Options
 -------
+
+You can also use data-attributes to setup the component. Target subsets by using prefixes, such as 'marker-icon'.
+
 <table>
   <tr>
     <th>Name</th><th>Description</th>
@@ -80,12 +116,30 @@ Options
   </tr>
 </table>
 
-You can also use data-attributes to setup the component. Target options by using prefixes, such as 'marker-icon'.
-
 ## Changelog
 
-* v0.0.5 - Added fix for map-icons
-* v0.0.4 - Map option 'draggable' defaults to false now
-* v0.0.3 - Fixed too strict jquery dependency
-* v0.0.2 - Added prefixed data-attributes. Changed zoom default to 14. Draggable map by default.
-* v0.0.1 - Initial Release
+#### Master
+
+* Optimize content geocoding
+
+#### v0.0.5
+
+* Added fix for map-icons
+
+#### v0.0.4
+
+* Set map option 'draggable' to false by default
+
+#### v0.0.3 
+
+* Fixed too strict jquery dependency
+
+#### v0.0.2
+
+* Added prefixed data-attributes. 
+* Changed zoom default to 14. 
+* Draggable map by default.
+
+#### v0.0.1
+
+* Initial Release

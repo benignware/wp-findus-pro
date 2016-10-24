@@ -1,6 +1,5 @@
 {
   "name": "jquery-findus",
-  "version": "0.0.5",
   "homepage": "https://github.com/benignware/jquery-findus",
   "authors": [
     "Rafael Nowrotek <mail@benignware.com>"
@@ -22,13 +21,13 @@
   "dependencies": {
     "jquery": "*"
   },
-  "_release": "0.0.5",
+  "_release": "1feb037985",
   "_resolution": {
-    "type": "version",
-    "tag": "v0.0.5",
-    "commit": "7ccf749745cfb057a5b37a4d1c261a8681fc40f1"
+    "type": "branch",
+    "branch": "master",
+    "commit": "1feb0379851e9232dda149e4e9d911f61225c94e"
   },
   "_source": "https://github.com/benignware/jquery-findus.git",
-  "_target": "^0.0.5",
+  "_target": "master",
   "_originalSource": "jquery-findus"
 }
