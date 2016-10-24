@@ -16,6 +16,7 @@ License URI: https://opensource.org/licenses/MIT
 Copyright 2016 benignware.com
 */
 
+require_once "lib/shortcode.php";
 require_once "lib/widget.php";
 
 function findus_enqueue_script() {
@@ -24,51 +25,13 @@ function findus_enqueue_script() {
   if ($api_key) {
     $api_params['key'] = urlencode($api_key);
   }
-  $api_url = 'http' . ($_SERVER['HTTPS'] ? 's' : '') . '://maps.googleapis.com/maps/api/js' . (count(array_keys($api_params)) > 0 ? '?' . urldecode(http_build_query($api_params)) : '');
-  wp_enqueue_script('google-maps', $api_url);
-  wp_enqueue_script( 'jquery-findus', plugin_dir_url( __FILE__ ) . 'assets/jquery-findus/dist/jquery.findus.min.js', array( 'jquery', 'google-maps' ) );
+  $api_url = 'http' . (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] ? 's' : '') . '://maps.googleapis.com/maps/api/js' . (count(array_keys($api_params)) > 0 ? '?' . urldecode(http_build_query($api_params)) : '');
+  wp_enqueue_script( 'google-maps', $api_url);
+  wp_enqueue_script( 'jquery-findus', plugin_dir_url( __FILE__ ) . 'assets/jquery-findus/dist/js/jquery.findus.js', array( 'jquery', 'google-maps' ) );
+  wp_enqueue_style( 'jquery-findus', plugin_dir_url( __FILE__ ) . 'assets/jquery-findus/dist/css/jquery.findus.css' );
 }
 
 add_action( 'wp_enqueue_scripts', 'findus_enqueue_script' );
-
-
-function findus_shortcode($atts = array(), $content = "") {
-  
-  $findus_options = array('content', 'address', 'longitude', 'latitude', 'map', 'marker', 'info');
-  $atts = shortcode_atts(array(
-    'id' => uniqid(),
-    'class' => 'findus',
-    'address' => '',
-    'content' => '',
-    'latitude' => '',
-    'longitude' => '',
-    'info' => ''
-  ), $atts, 'findus');
-  
-  $options = array();
-  foreach ($atts as $name => $value) {
-    if (in_array($name, $findus_options) === true) {
-      unset($atts[$name]);
-      $options[$name] = $value;
-    } 
-  }
-  $json = json_encode($options, JSON_UNESCAPED_SLASHES);
-  
-  // Create output
-  $output = "<div";
-  foreach ($atts as $name => $value) {
-    $output.= ' ' . $name . '="' . $value . '"';
-  }
-  $output.= ">";
-  $output.= $content;
-  $output.= "</div>";
-  $output.= "<script type=\"text/javascript\">//<![CDATA[\n(function($, window) {\n";
-  $output.= "\t$('#{$atts['id']}').findus(" . $json . ");\n";
-  $output.= "})(jQuery, window)\n//]]></script>\n";
-  return $output;
-}
- 
-add_shortcode('findus', 'findus_shortcode');
 
 
 
@@ -81,7 +44,6 @@ function my_mce_buttons_2( $buttons ) {
 }
 // Register our callback to the appropriate filter
 add_filter( 'mce_buttons_2', 'my_mce_buttons_2' );
-
 
 
 // Callback function to filter the MCE settings
