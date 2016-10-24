@@ -27,7 +27,7 @@ class FindUsWidget extends WP_Widget {
       echo $args['before_title'] . $title . $args['after_title'];
    
     // This is where you run the code and display the output
-    echo findus_shortcode(array(), $content);
+    echo findus_shortcode(array(), nl2br($content));
     
     echo $args['after_widget'];
   }
@@ -54,7 +54,7 @@ class FindUsWidget extends WP_Widget {
   </p>
   <p>
     <label for="<?php echo $this->get_field_id( 'content' ); ?>"><?php _e( 'Content:' ); ?></label> 
-    <input class="widefat" id="<?php echo $this->get_field_id( 'content' ); ?>" name="<?php echo $this->get_field_name( 'content' ); ?>" type="text" value="<?php echo esc_attr( $content ); ?>" />
+    <textarea class="widefat" id="<?php echo $this->get_field_id( 'content' ); ?>" name="<?php echo $this->get_field_name( 'content' ); ?>" type="text"><?php echo esc_attr( $content ); ?></textarea>
   </p>
   <?php 
   }
