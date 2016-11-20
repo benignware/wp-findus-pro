@@ -14,7 +14,7 @@ composer.lock
 
 # Build
 tmp
-dist
+/dist
 
 # Test
 test
