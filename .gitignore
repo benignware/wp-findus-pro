@@ -25,3 +25,6 @@ vendor
 # Include only jquery-findus from the assets directory
 assets/*
 !assets/jquery-findus
+
+# Lib
+!lib
