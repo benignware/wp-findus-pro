@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: FindUs
+Plugin Name: Find Us
 Plugin URI: https://github.com/benignware-labs/wp-findus
 Description: Create contact-maps easily.
 Version: 0.0.1
@@ -16,22 +16,31 @@ License URI: https://opensource.org/licenses/MIT
 Copyright 2016 benignware.com
 */
 
+require_once "lib/helpers.php";
 require_once "lib/shortcode.php";
 require_once "lib/widget.php";
+require_once "lib/editor.php";
 
-function findus_enqueue_script() {
+add_action( 'init', function() {
   $api_params = array();
   $api_key = get_option('api_key');
   if ($api_key) {
     $api_params['key'] = urlencode($api_key);
   }
   $api_url = 'http' . (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] ? 's' : '') . '://maps.googleapis.com/maps/api/js' . (count(array_keys($api_params)) > 0 ? '?' . urldecode(http_build_query($api_params)) : '');
-  wp_enqueue_script( 'google-maps', $api_url);
-  wp_enqueue_script( 'jquery-findus', plugin_dir_url( __FILE__ ) . 'assets/jquery-findus/dist/js/jquery.findus.js', array( 'jquery', 'google-maps' ) );
-  wp_enqueue_style( 'jquery-findus', plugin_dir_url( __FILE__ ) . 'assets/jquery-findus/dist/css/jquery.findus.css' );
-}
 
-add_action( 'wp_enqueue_scripts', 'findus_enqueue_script' );
+  wp_register_script( 'google-maps-api', $api_url);
+});
+
+add_action('enqueue_block_editor_assets', function() {
+  wp_enqueue_script('google-maps-api');
+});
+
+add_action( 'wp_enqueue_scripts', function() {
+  wp_enqueue_script('google-maps');
+  wp_enqueue_script('jquery-findus', plugin_dir_url( __FILE__ ) . 'assets/jquery-findus/dist/js/jquery.findus.js', array( 'jquery', 'google-maps-api' ));
+  wp_enqueue_style('jquery-findus', plugin_dir_url( __FILE__ ) . 'assets/jquery-findus/dist/css/jquery.findus.css');
+});
 
 
 
@@ -47,38 +56,38 @@ add_filter( 'mce_buttons_2', 'my_mce_buttons_2' );
 
 
 // Callback function to filter the MCE settings
-function my_mce_before_init_insert_formats( $init_array ) {  
+function my_mce_before_init_insert_formats( $init_array ) {
   // Define the style_formats array
-  $style_formats = array(  
+  $style_formats = array(
     // Each array child is a format with it's own settings
-    array(  
-      'title' => 'block',  
-      'block' => 'div',  
+    array(
+      'title' => 'block',
+      'block' => 'div',
       'classes' => 'card card-block',
       'wrapper' => true,
-      
-    ),  
-    array(  
-      'title' => '⇠.rtl',  
-      'block' => 'blockquote',  
+
+    ),
+    array(
+      'title' => '⇠.rtl',
+      'block' => 'blockquote',
       'classes' => 'rtl',
       'wrapper' => true,
     ),
-    array(  
-      'title' => '.ltr⇢',  
-      'block' => 'blockquote',  
+    array(
+      'title' => '.ltr⇢',
+      'block' => 'blockquote',
       'classes' => 'ltr',
       'wrapper' => true,
     ),
-  );  
+  );
   // Insert the array, JSON ENCODED, into 'style_formats'
-  $init_array['style_formats'] = json_encode( $style_formats );  
-  
-  return $init_array;  
-  
-} 
-// Attach callback to 'tiny_mce_before_init' 
-add_filter( 'tiny_mce_before_init', 'my_mce_before_init_insert_formats' );  
+  $init_array['style_formats'] = json_encode( $style_formats );
+
+  return $init_array;
+
+}
+// Attach callback to 'tiny_mce_before_init'
+add_filter( 'tiny_mce_before_init', 'my_mce_before_init_insert_formats' );
 */
 
 
@@ -113,7 +122,7 @@ function findus_settings_page() {
           <td><input type="text" name="api_key" value="<?php echo esc_attr( get_option('api_key') ); ?>" /></td>
         </tr>
     </table>
-    
+
     <?php submit_button(); ?>
 
 </form>

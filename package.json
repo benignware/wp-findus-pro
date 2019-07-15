@@ -1,0 +1,39 @@
+{
+  "name": "wp-findus",
+  "version": "1.0.0",
+  "description": "> Create contact maps easily",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "cgb-scripts start",
+    "build": "cgb-scripts build",
+    "eject": "cgb-scripts eject"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/benignware-labs/wp-findus.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/benignware-labs/wp-findus/issues"
+  },
+  "homepage": "https://github.com/benignware-labs/wp-findus#readme",
+  "devDependencies": {
+    "autoprefixer": "^9.6.0",
+    "cgb-scripts": "1.18.1",
+    "node-sass": "^4.12.0",
+    "postcss": "^7.0.17",
+    "postcss-cli": "^6.1.2"
+  },
+  "dependencies": {
+    "classnames": "^2.2.6",
+    "humanize-string": "^2.1.0",
+    "humps": "^2.0.1",
+    "lodash.omit": "^4.5.0"
+  }
+}

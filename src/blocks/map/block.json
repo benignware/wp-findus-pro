@@ -1,0 +1,13 @@
+{
+	"name": "findus/map",
+	"category": "map",
+	"attributes": {
+		"id": {
+			"type": "string"
+		},
+		"content": {
+			"type": "string",
+			"default": ""
+		}
+	}
+}
