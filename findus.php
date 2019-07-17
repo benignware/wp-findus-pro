@@ -105,10 +105,43 @@ function findus_create_menu() {
 
 function register_findus_settings() {
   //register our settings
+  /*
   register_setting( 'findus-settings-group', 'api_key' );
+  register_setting( 'findus-settings-group', 'map_styles' );
+  register_setting( 'findus-settings-group', 'marker_icon' );
+  */
+  register_setting( 'findus-settings-group', 'findus_options', array(
+    'default' => array(
+      'map' => array(),
+      'marker' => array()
+    )
+  ));
 }
 
+
 function findus_settings_page() {
+
+  // Set variables
+  $options = get_option('findus_options');
+
+  // API Key
+  $api_key = $options['api_key'];
+
+  // Marker
+  $marker_icon = $options['marker']['icon'];
+  $default_image = '';
+
+  if ( !empty( $marker_icon ) ) {
+    $image_attributes = wp_get_attachment_image_src( $marker_icon );
+    $marker_icon_src = $image_attributes[0];
+    $marker_icon_value = $marker_icon;
+  } else {
+    $marker_icon_src = $default_image;
+    $marker_icon_value = '';
+  }
+
+  // Map
+  $map_styles = $options['map']['styles'];
 ?>
 <div class="wrap">
 <h2>FindUs</h2>
@@ -119,7 +152,26 @@ function findus_settings_page() {
     <table class="form-table">
         <tr valign="top">
           <th scope="row">Google Maps API Key</th>
-          <td><input type="text" name="api_key" value="<?php echo esc_attr( get_option('api_key') ); ?>" /></td>
+          <td><input type="text" name="findus_options[api_key]" value="<?php echo esc_attr( $api_key ); ?>" /></td>
+        </tr>
+
+        <tr valign="top">
+          <th scope="row">Map Styles</th>
+          <td><textarea type="text" name="findus_options[map][styles]"><?php echo esc_attr( $map_styles ); ?></textarea></td>
+        </tr>
+
+        <tr valign="top">
+          <th scope="row">Marker Icon</th>
+          <td>
+            <div class="upload">
+                <img data-src="<?= $default_image; ?>" src="<?= $marker_icon_src; ?>"/>
+                <div>
+                    <input type="hidden" name="findus_options[marker][icon]" id="marker_icon" value="<?= $marker_icon_value; ?>" />
+                    <button type="button" class="upload_image_button button"><?= __('Upload', 'findus'); ?></button>
+                    <button type="button" class="remove_image_button button">&times;</button>
+                </div>
+            </div>
+          </td>
         </tr>
     </table>
 
@@ -127,4 +179,33 @@ function findus_settings_page() {
 
 </form>
 </div>
-<?php } ?>
+<?php
+}
+
+
+/**
+ * Load scripts and style sheet for settings page
+ */
+
+add_action('admin_enqueue_scripts', function() {
+  // WordPress library
+  wp_enqueue_media();
+  // Settings Script
+  wp_enqueue_script('findus-settings', plugin_dir_url( __FILE__ ) . 'assets/settings.js', array( 'jquery' ));
+});
+
+/*
+add_filter('shortcode_atts_findus', function($out, $pairs, $atts, $shortcode) {
+  $marker_icon = get_option('marker_icon');
+  $marker_icon_src = $marker_icon ? wp_get_attachment_image_src( $marker_icon )[0] : null;
+
+  return array_merge($out, array(
+    'marker' => array_merge($marker_icon_src ? array(
+      'icon' => $marker_icon_src
+    ) : array(), $out['map'] ?: array()),
+    'map' => array_merge(array(
+      'styles' => json_decode(get_option('map_styles'))
+    ), $out['map'] ?: array())
+  ), $atts);
+}, 1, 4);
+*/

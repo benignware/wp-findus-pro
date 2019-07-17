@@ -17,6 +17,7 @@ if (function_exists('wp_bootstrap_hooks')) {
 }
 
 // Customize Maps
+/*
 add_filter('shortcode_atts_findus', function($out, $pairs, $atts, $shortcode) {
   return array_merge($out, array(
     'map' => array(
@@ -60,6 +61,7 @@ add_filter('shortcode_atts_findus', function($out, $pairs, $atts, $shortcode) {
     )
   ), $atts);
 }, 10, 4);
+*/
 
 // Setup phpmailer
 add_action( 'phpmailer_init', function($phpmailer) {
