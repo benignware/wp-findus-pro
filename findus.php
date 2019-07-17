@@ -3,7 +3,7 @@
 Plugin Name: Find Us
 Plugin URI: https://github.com/benignware-labs/wp-findus
 Description: Create contact-maps easily.
-Version: 0.1.0-beta.2
+Version: 0.1.0-beta.3
 Author: Rafael Nowrotek
 Author URI: http://benignware.com
 Author Email: mail@benignware.com
@@ -22,8 +22,11 @@ require_once "lib/widget.php";
 require_once "lib/editor.php";
 
 add_action( 'init', function() {
+  $options = get_option('findus_options');
+
   $api_params = array();
-  $api_key = get_option('api_key');
+  $api_key = $options['api_key'];
+
   if ($api_key) {
     $api_params['key'] = urlencode($api_key);
   }
