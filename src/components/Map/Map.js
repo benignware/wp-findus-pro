@@ -1,6 +1,11 @@
 import React, { Component, createRef } from 'react';
 import omit from 'lodash.omit';
-import Findus from '../../lib/findus';
+// import findus from '../../../node_modules/findus/dist/findus.js';
+// import findus from '../../../node_modules/findus/src/js/lib/Findus.js';
+// import '../../lib/findus/findus.js';
+// import findus from 'findus';
+
+const findus = global.findus;
 
 export default class Map extends Component {
   constructor() {
@@ -11,18 +16,29 @@ export default class Map extends Component {
   }
 
   getOptions() {
-    return omit(this.props, [
+    let options = omit(this.props, [
       'id',
       'className',
       'children'
     ]);
+
+    // options = {
+    //   zoom: 8,
+    //   zoomControl: true,
+    //   scaleControl: true,
+    //   ...options
+    // };
+
+    console.log('options', options);
+
+    return options;
   }
 
   componentDidMount() {
     const { current: element } = this.ref;
     const options = this.getOptions();
 
-    this.findus = new Findus(element, options);
+    this.findus = global.findus(element, options);
   }
 
   componentWillUnmount() {
@@ -30,8 +46,10 @@ export default class Map extends Component {
   }
 
   componentDidUpdate() {
-    this.findus.setOptions(this.getOptions());
-    this.findus.update();
+    // this.findus.setOptions(this.getOptions());
+
+    console.log('findus..', this.getOptions());
+    this.findus.update(this.getOptions());
   }
 
   render() {

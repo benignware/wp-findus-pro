@@ -1,6 +1,6 @@
 {
-  "name": "bennignware/wp-findus",
-  "version": "0.1.0-beta.3",
+  "name": "bennignware/wp-findus-pro",
+  "version": "0.1.0-beta.4",
   "type": "wordpress-plugin",
   "license": "MIT",
   "description": "Create contact maps easily",

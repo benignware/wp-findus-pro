@@ -1,9 +1,9 @@
 <?php
 /*
-Plugin Name: Find Us
-Plugin URI: https://github.com/benignware-labs/wp-findus
+Plugin Name: Findus Pro
+Plugin URI: https://github.com/benignware/wp-findus-pro
 Description: Create contact-maps easily.
-Version: 0.1.0-beta.3
+Version: 0.1.0-beta.4
 Author: Rafael Nowrotek
 Author URI: http://benignware.com
 Author Email: mail@benignware.com
@@ -32,17 +32,22 @@ add_action( 'init', function() {
   }
   $api_url = 'http' . (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] ? 's' : '') . '://maps.googleapis.com/maps/api/js' . (count(array_keys($api_params)) > 0 ? '?' . urldecode(http_build_query($api_params)) : '');
 
-  wp_register_script( 'google-maps-api', $api_url);
+  wp_register_script( 'google-maps', $api_url, true);
+
+  wp_register_script('findus-js', plugin_dir_url( __FILE__ ) . 'dist/findus.js', array('google-maps'));
+  wp_register_style('findus-css', plugin_dir_url( __FILE__ ) . 'dist/findus.css');
 });
 
 add_action('enqueue_block_editor_assets', function() {
-  wp_enqueue_script('google-maps-api');
+  wp_enqueue_script('google-maps');
+  wp_enqueue_script('findus-js');
+  wp_enqueue_style('findus-css');
 });
 
 add_action( 'wp_enqueue_scripts', function() {
   wp_enqueue_script('google-maps');
-  wp_enqueue_script('jquery-findus', plugin_dir_url( __FILE__ ) . 'assets/jquery-findus/dist/js/jquery.findus.js', array( 'jquery', 'google-maps-api' ));
-  wp_enqueue_style('jquery-findus', plugin_dir_url( __FILE__ ) . 'assets/jquery-findus/dist/css/jquery.findus.css');
+  wp_enqueue_script('findus-js');
+  wp_enqueue_style('findus-css');
 });
 
 

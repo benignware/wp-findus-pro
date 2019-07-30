@@ -25,7 +25,7 @@ services:
     restart: always
     volumes:
       - wordpress:/var/www/html
-      - .:/var/www/html/wp-content/plugins/findus
+      - .:/var/www/html/wp-content/plugins/findus-pro
       - ./wp-install.sh:/usr/local/bin/wp-install.sh
       - .uploads:/var/www/html/wp-content/uploads
       - .plugins:/var/www/html/wp-content/plugins

@@ -8,6 +8,26 @@
 		"content": {
 			"type": "string",
 			"default": ""
+		},
+		"zoom": {
+			"type": "number",
+			"default": 14
+		},
+		"draggable": {
+			"type": "boolean",
+			"default": false
+		},
+		"zoomControl": {
+			"type": "boolean",
+			"default": false
+		},
+		"mapTypeControl": {
+			"type": "boolean",
+			"default": false
+		},
+		"disableDefaultUI": {
+			"type": "boolean",
+			"default": false
 		}
 	}
 }

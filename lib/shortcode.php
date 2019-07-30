@@ -1,14 +1,9 @@
 <?php
-function findus_shortcode($atts = array(), $content = "") {
+function findus_shortcode($params = array(), $content = "") {
 
-  $findus_options = array(
-    'content',
-    'address',
-    'longitude',
-    'latitude',
-    'map',
-    'marker',
-    'info'
+  $html_atts = array(
+    'id',
+    'class'
   );
 
   $atts = shortcode_atts(array_merge(
@@ -22,15 +17,14 @@ function findus_shortcode($atts = array(), $content = "") {
       'info' => ''
     ),
     get_option('findus_options')
-  ), $atts, 'findus');
+  ), $params, 'findus');
 
   $atts['class'] = trim('findus ' . (isset($atts['class']) ? $atts['class'] : ''));
 
   $options = array();
-  foreach ($atts as $name => $value) {
-    if (in_array($name, $findus_options)) {
+  foreach ($params as $name => $value) {
+    if (!in_array($name, $html_atts)) {
       $options[$name] = $value;
-      unset($atts[$name]);
     }
   }
 
@@ -42,7 +36,7 @@ function findus_shortcode($atts = array(), $content = "") {
     $options['map']['styles'] = json_decode($options['map']['styles']) ?: $options['map']['styles'];
   }
 
-  $json = json_encode($options, JSON_UNESCAPED_SLASHES);
+  $json = json_encode(wp_findus_camelize_keys($options), JSON_UNESCAPED_SLASHES);
 
   // Tidy up html
   $content = force_balance_tags($content);
@@ -61,9 +55,10 @@ function findus_shortcode($atts = array(), $content = "") {
   $output.= ">";
   $output.= $content;
   $output.= "</div>";
-  $output.= "<script type=\"text/javascript\">//<![CDATA[\n(function($, window) {\n";
-  $output.= "\t$('#{$atts['id']}').findus(" . $json . ");\n";
-  $output.= "})(jQuery, window)\n//]]></script>\n";
+  $output.= "<script type=\"text/javascript\">//<![CDATA[\n(function(window) {\n";
+  // $output.= "\t$('#{$atts['id']}').findus(" . $json . ");\n";
+  $output.= "\tfindus(document.querySelector('#{$atts['id']}'), " . $json . ");\n";
+  $output.= "})(window)\n//]]></script>\n";
 
   return $output;
 }

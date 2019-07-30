@@ -50,7 +50,7 @@ add_filter( 'block_categories', function($categories, $post) {
 add_action( 'init', function() { // phpcs:ignore
 	// Register block styles for both frontend + backend.
 	wp_register_style(
-		'findus-css', // Handle.
+		'findus-block-css', // Handle.
 		plugins_url( 'dist/blocks.style.build.css', dirname( __FILE__ ) ), // Block style CSS.
 		array( 'wp-editor' ), // Dependency to include the CSS after it.
 		null // filemtime( plugin_dir_path( __DIR__ ) . 'dist/blocks.style.build.css' ) // Version: File modification time.
@@ -58,7 +58,7 @@ add_action( 'init', function() { // phpcs:ignore
 
 	// Register block editor script for backend.
 	wp_register_script(
-		'findus-js', // Handle.
+		'findus-block-js', // Handle.
 		plugins_url( '/dist/blocks.build.js', dirname( __FILE__ ) ), // Block.build.js: We register the block here. Built with Webpack.
 		array( 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-editor' ), // Dependencies, defined above.
 		null, // filemtime( plugin_dir_path( __DIR__ ) . 'dist/blocks.build.js' ), // Version: filemtime — Gets file modification time.
@@ -67,7 +67,7 @@ add_action( 'init', function() { // phpcs:ignore
 
 	// Register block editor styles for backend.
 	wp_register_style(
-    'findus-editor-css', // Handle.
+    'findus-block-editor-css', // Handle.
 		plugins_url( 'dist/blocks.editor.build.css', dirname( __FILE__ ) ), // Block editor CSS.
 		array( 'wp-edit-blocks' ), // Dependency to include the CSS after it.
 		null // filemtime( plugin_dir_path( __DIR__ ) . 'dist/blocks.editor.build.css' ) // Version: File modification time.
@@ -86,11 +86,11 @@ add_action( 'init', function() { // phpcs:ignore
 	register_block_type(
 		'findus/map', array(
 			// Enqueue blocks.style.build.css on both frontend & backend.
-			'style'         => 'findus-css',
+			'style'         => 'findus-block-css',
 			// Enqueue blocks.build.js in the editor only.
-			'editor_script' => 'findus-js',
+			'editor_script' => 'findus-block-js',
 			// Enqueue blocks.editor.build.css in the editor only.
-			'editor_style'  => 'findus-editor-css',
+			'editor_style'  => 'findus-block-editor-css',
 			'render_callback' => function($attributes, $content) {
 				$attributes = wp_findus_snakeify_keys($attributes);
 				$content = $attributes['content'] ?: $attributes['location'];

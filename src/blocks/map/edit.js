@@ -27,7 +27,9 @@ const { Component, Fragment } = wp.element;
 
 const {
 	PanelBody,
-	TextareaControl
+	TextareaControl,
+	ToggleControl,
+	RangeControl
 } = wp.components;
 
 const { withSelect } = wp.data;
@@ -82,12 +84,57 @@ class MapEdit extends Component {
 							/* eslint-enable jsx-a11y/no-autofocus */
 							onChange={ ( value ) => setAttributes( { content: value } ) }
 						/>
+
+						<RangeControl
+							label={ __( 'Zoom' ) }
+							value={ attributes.zoom }
+							onChange={(value) => setAttributes({
+								...attributes,
+								zoom: value
+							})}
+							min={ 0 }
+							max={ 24 }
+						/>
+						<ToggleControl
+							label={ __( 'Draggable' ) }
+							checked={ !! attributes.draggable }
+							onChange={ (value) => {
+								setAttributes({
+									...attributes,
+									draggable: value
+								});
+							} }
+							help={ () => attributes.draggable ? __('Map is draggable') : __(`Map isn't draggable`) }
+						/>
+						<ToggleControl
+							label={ __( 'Disable Default UI' ) }
+							checked={ !! attributes.disableDefaultUI }
+							onChange={ (value) => {
+								setAttributes({
+									...attributes,
+									disableDefaultUI: value
+								});
+							} }
+							help={ () => attributes.disableDefaultUI ? __('Default UI is disabled') : __(`Default UI is enabled`) }
+						/>
+						<ToggleControl
+							label={ __( 'Zoom Control' ) }
+							checked={ !! attributes.zoomControl }
+							onChange={ (value) => {
+								setAttributes({
+									...attributes,
+									zoomControl: value
+								});
+							} }
+							help={ () => attributes.zoomControl ? __('Zoom Control is enabled') : __(`Zoom Control isn't enabled`) }
+						/>
 					</PanelBody>
 				</InspectorControls>
 				<Map
 					id={id}
 					content={content.replace(/\n/, '<br/>')}
 					className={className}
+					{...attributes}
 				/>
 			</Fragment>
 		);

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+    <link rel="stylesheet" href="/findus.css">
+  </head>
+  <body>
+    <div class="site p-4">
+      <div>
+        <h1>findus</h1>
+        <p>Create contact maps easily<p>
+        <div id="test" class="findus">
+          Hamburg, Elbchausse 747
+        </div>
+      </div>
+    </div>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBm_OeXvkldDrjkc_3tdAifzObfB8lzS_I" async defer></script>
+    <script src="/findus.js" async defer></script>
+    <script>
+      findus(document.querySelector('.findus'));
+    </script>
+  </body>
+</html>

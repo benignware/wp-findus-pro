@@ -1,1 +1,2 @@
-export { default } from './Findus';
+// export { default as Findus } from './Findus';
+export { default } from './findus';
